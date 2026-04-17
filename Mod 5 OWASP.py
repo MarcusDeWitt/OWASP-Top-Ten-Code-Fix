@@ -13,8 +13,8 @@ def get_account(user_id):
 @app.route('/account/<user_id>')
 def get_account(user_id):
     user = db.query(User).filter_by(id=user_id).first()
-    if user.id != current_user.id:
-        return jsonify({'error': 'Unauthorized access'}), 403
+    if user.id != current_user.id: # Check if the requested user ID matches the currently authenticated user's ID
+        return jsonify({'error': 'Unauthorized access'}), 403 # Return a 403 Forbidden response if the user is trying to access another user's account 
     return jsonify(user.to_dict())
 
 #-----------------------------------------#
@@ -28,10 +28,10 @@ def hash_password(password):
 # Fixed code for Cryptographic Failures
 import bcrypt
 def hash_password(password):
-    salt = bcrypt.gensalt()
+    salt = bcrypt.gensalt() # Generate a salt for hashing the password
     return bcrypt.hashpw(password.encode(), salt)
 
-def check_password(password, hashed):
+def check_password(password, hashed): # Check the provided password against the stored hashed password
     return bcrypt.checkpw(password.encode(), hashed)
 
 #-----------------------------------------#
@@ -47,9 +47,9 @@ def get_user():
 def get_user():
     username = request.args.get('username')
 
-    user = db.session.query(User).filter_by(username=username).first()
+    user = db.session.query(User).filter_by(username=username).first() # Use parameterized queries or an ORM to safely query the database and prevent injection attacks
 
-    if not user:
+    if not user: # Validate user existence before returning the response
         return {"error": "User not found"}, 404
 
     return user.to_dict()
@@ -84,7 +84,9 @@ def reset_password():
 # Original code for Software and Data Integrity Failures
 <script src="https://cdn.example.com/lib.js"></script>
 # Fixed code for Software and Data Integrity Failures
-<script src="https://cdn.example.com/lib.js" integrity="sha384-abc123" crossorigin="anonymous"></script>
+<script src="https://cdn.example.com/lib.js" 
+integrity="sha384-abc123" # Integrity check to ensure the script has not been tampered with 
+crossorigin="anonymous"></script> 
 
 #------------------------------------------#
 
@@ -124,7 +126,7 @@ if (inputPassword.equals(user.getPassword())) {
 import bcrypt
 
 def login(input_password, stored_password):
-    if bcrypt.checkpw(input_password.encode(), stored_password.encode()):
+    if bcrypt.checkpw(input_password.encode(), stored_password.encode()): # Use bcrypt to securely check the provided password against the stored hashed password
         # Login success
         return True
     else:
